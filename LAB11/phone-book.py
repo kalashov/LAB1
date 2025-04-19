@@ -53,11 +53,18 @@ def search_user():
             print(row)
 
 def delete_user():
-    name = input("Enter name to delete (or leave empty): ").strip() or None
-    phone = input("Enter phone to delete (or leave empty): ").strip() or None
-    cur.execute("CALL delete_user(%s, %s)", (name, phone))
+    first = input("Enter first name (or leave empty): ").strip()
+    last = input("Enter last name (or leave empty): ").strip()
+    phone = input("Enter phone to delete (or leave empty): ").strip()
+
+    if phone:
+        cur.execute("CALL delete_user_by_phone(%s)", (phone,))
+    elif first and last:
+        cur.execute("CALL delete_user_by_name_and_surname(%s, %s)", (first, last))
+    else:
+        print("provide normally")
+
     conn.commit()
-    print("🗑 User(s) deleted")
 
 def paginate():
     limit = int(input("Enter number of rows per page: "))
@@ -66,6 +73,18 @@ def paginate():
     rows = cur.fetchall()
     for row in rows:
         print(row)
+
+def addlist():
+    while True:
+        first = input("First name: ")
+        last = input("Last name: ")
+        phone = input("Phone number: ")
+        cur.execute("CALL upsert_user(%s, %s, %s)", (first, last, phone))
+        conn.commit()
+        print("✅ User inserted or updated")
+        to_stop = input("Write stop to stop or leave it empty to continue: ")
+        if to_stop == "stop":
+            break
 
 def main():
     while True:
@@ -76,6 +95,7 @@ def main():
         print("4. Search user")
         print("5. Delete user")
         print("6. Show paginated list")
+        print("7. ADD many users in a row")
         print("0. Exit")
 
         choice = input("Choose: ")
@@ -92,6 +112,8 @@ def main():
             delete_user()
         elif choice == "6":
             paginate()
+        elif choice == "7":
+            addlist()
         elif choice == "0":
             break
         else:
