@@ -28,11 +28,11 @@ while True:
     screen.fill((255, 255, 255))
     screen.blit(mickey_img, mickey_rect)
 
-    rotated_right_hand = pygame.transform.rotate(right_hand, second_angle)
-    rotated_left_hand = pygame.transform.rotate(left_hand, minute_angle)
+    rotated_right_hand = pygame.transform.rotate(right_hand, -second_angle)
+    rotated_left_hand = pygame.transform.rotate(left_hand, -minute_angle)
 
     screen.blit(rotated_right_hand, rotated_right_hand.get_rect(center=mickey_rect.center))
     screen.blit(rotated_left_hand, rotated_left_hand.get_rect(center=mickey_rect.center))
 
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(1)

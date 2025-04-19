@@ -29,6 +29,9 @@ def show_score():
     screen.blit(score_surface, [10, 10])
 
 game_over = False
+
+cur = 0
+
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -65,6 +68,8 @@ while not game_over:
         score += 1
         food_eaten += 1
         food_spawn = False
+        cur += 100
+
     else:
         snake_body.pop()
 
@@ -78,11 +83,10 @@ while not game_over:
         level += 1
         speed += 3
         food_eaten = 0
-
     screen.fill((255,255,255))
 
     for pos in snake_body:
-        pygame.draw.rect(screen, (0,255,0), pygame.Rect(pos[0], pos[1], 10, 10))
+        pygame.draw.rect(screen, (0,cur%256,0), pygame.Rect(pos[0], pos[1], 10, 10))
 
     pygame.draw.rect(screen, (255,0,0), pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
